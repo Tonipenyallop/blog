@@ -2,7 +2,9 @@
   display: flex;
   flex-direction: column;
   margin: 10%;
-
+  .page-title {
+    text-align: center;
+  }
   .card {
     border: 1px solid black;
     margin: 10px;

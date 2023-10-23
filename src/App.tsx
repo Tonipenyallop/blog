@@ -58,6 +58,7 @@ function App() {
 
   return (
     <div className="app-container">
+      <h1 className="page-title"> WELCOME TO TONI BLOG</h1>
       {allPosts.map((post, idx) => {
         const { id, author, title, context } = post;
 
