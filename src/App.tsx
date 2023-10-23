@@ -23,13 +23,11 @@ function App() {
     const { data } = await axios.get("http://localhost:3001/posts");
     setAllPosts(data);
   };
-  const sendRequest = async (event: React.MouseEvent<HTMLInputElement>) => {
+  const sendRequest = async () => {
     if (context === "" || title === "") {
       return;
     }
-    console.log("sendRequest method was called ");
-    console.log("event");
-    console.log(event);
+
     try {
       await axios.post("http://localhost:3001/create", {
         context,
@@ -47,11 +45,7 @@ function App() {
   };
 
   const deletePost = async (postId: number) => {
-    console.log("postId in delete");
-    console.log(postId);
-    const response = await axios.delete(`http://localhost:3001/post/${postId}`);
-    console.log("response FE");
-    console.log(response);
+    await axios.delete(`http://localhost:3001/post/${postId}`);
     setPostAddedFlag(!postAddedFlag);
   };
 

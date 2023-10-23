@@ -38,8 +38,8 @@ app.delete("/post/:postId", async (req: Request, res: Response) => {
   try {
     const { postId } = req.params;
 
-    const posts = await postService.deletePost(Number(postId));
-    return res.status(200).send(posts);
+    await postService.deletePost(Number(postId));
+    return res.sendStatus(204);
   } catch (err) {
     console.error(`err while getting posts: ${err}`);
     throw err;

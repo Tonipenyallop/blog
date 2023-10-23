@@ -1,0 +1,19 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  margin: 10%;
+
+  .card {
+    border: 1px solid black;
+    margin: 10px;
+  }
+  .title-field {
+    min-height: 50px;
+  }
+  .context-container {
+    display: flex;
+  }
+  .context-field {
+    min-height: 300px;
+  }
+}

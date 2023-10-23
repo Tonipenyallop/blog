@@ -1,6 +1,5 @@
 import { pool } from "../../db/index";
 import { Post } from "../../../types";
-// posts repository
 
 export const postRepository = {
   getAllPosts: async () => {
@@ -12,19 +11,17 @@ export const postRepository = {
 
   createPost: async (post: Post) => {
     try {
-      const results = await pool.query(
+      await pool.query(
         `INSERT INTO blogschema.posts (title, context, author) VALUES ($1, $2, $3)`,
         [post.title, post.context, post.author]
       );
-
-      return results.rows;
     } catch (err) {
       throw new Error(`error occurred while sending SELECT schema: ${err}`);
     }
   },
   deletePost: async (postId: number) => {
     try {
-      return await pool.query(`UPDATE blogschema.posts SET
+      await pool.query(`UPDATE blogschema.posts SET
       is_deleted = true WHERE
       id = ${postId}`);
     } catch (err) {
