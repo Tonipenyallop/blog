@@ -46,4 +46,17 @@ app.delete("/post/:postId", async (req: Request, res: Response) => {
   }
 });
 
+app.post("/post/:postId", async (req: Request, res: Response) => {
+  try {
+    const { postId } = req.params;
+    const { context } = req.body;
+
+    await postService.updatePost(Number(postId), context);
+    return res.sendStatus(200);
+  } catch (err) {
+    console.error(`error while updating post:${err}`);
+    throw err;
+  }
+});
+
 app.listen(PORT, () => console.log(`Listing PORT:${PORT}`));

@@ -11,4 +11,8 @@ export const postService = {
     if (!postId) return null;
     return postRepository.deletePost(postId);
   },
+  updatePost: (postId: number, context: string) => {
+    if (!postId || !context) return null;
+    return postRepository.updatePost(postId, context);
+  },
 };

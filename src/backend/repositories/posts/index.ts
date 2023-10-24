@@ -29,4 +29,17 @@ export const postRepository = {
       throw err;
     }
   },
+  updatePost: async (postId: number, context: string) => {
+    try {
+      console.log("context from repo");
+      console.log(context);
+      await pool.query(
+        `UPDATE blogschema.posts SET context = $1 WHERE id = $2`,
+        [context, postId]
+      );
+    } catch (err) {
+      console.error(`error occurred while updating post:${err}`);
+      throw err;
+    }
+  },
 };
