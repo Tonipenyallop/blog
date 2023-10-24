@@ -16,6 +16,6 @@
     display: flex;
   }
   .context-field {
-    min-height: 300px;
+    white-space: pre-line;
   }
 }
