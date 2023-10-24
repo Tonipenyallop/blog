@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "front-dev": "nodemon src/index",
+    "front-dev": "PORT=3001 nodemon src/index",
     "back-dev": "nodemon src/backend/index.ts",
     "build": "react-scripts build",
     "test": "react-scripts test",
