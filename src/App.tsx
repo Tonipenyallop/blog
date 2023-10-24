@@ -3,9 +3,10 @@ import "bootstrap/dist/css/bootstrap.css";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import "./App.css";
-import { Button, Card } from "react-bootstrap";
+import { Button, Card, Form, InputGroup } from "react-bootstrap";
 import Create from "./create/index";
 import { Post } from "./types";
+
 const author = "Taesu"; // username
 
 function App() {
@@ -14,6 +15,8 @@ function App() {
   const [displayCreate, setDisplayCreate] = useState<boolean>(false);
   const [allPosts, setAllPosts] = useState<Post[]>([]);
   const [postAddedFlag, setPostAddedFlag] = useState<boolean>(false);
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [editedPost, setEditedPost] = useState<number>(-1);
 
   useEffect(() => {
     getAllPosts();
@@ -49,6 +52,15 @@ function App() {
     setPostAddedFlag(!postAddedFlag);
   };
 
+  const updatePost = async (postId: number) => {
+    await axios.post(`http://localhost:3001/post/${postId}`, { context });
+    setIsEditMode(false);
+    // for preventing update all of
+    setEditedPost(-1);
+    // for retrieving updated post
+    setPostAddedFlag(!postAddedFlag);
+  };
+
   const updateContext = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContext(event.target.value);
   };
@@ -61,17 +73,48 @@ function App() {
       <h1 className="page-title"> WELCOME TO TONI BLOG</h1>
       {allPosts.map((post, idx) => {
         const { id, author, title, context } = post;
-
         return (
           <Card key={`post-key-${idx}`}>
             <Card.Body>
               <Card.Title>{title}</Card.Title>
-              <Card.Text>{context}</Card.Text>
+              {isEditMode && editedPost === id ? (
+                <InputGroup>
+                  <Form.Control
+                    rows={25}
+                    as="textarea"
+                    aria-label="With textarea"
+                    onChange={updateContext}
+                    placeholder="description..."
+                    defaultValue={context}
+                  />
+                </InputGroup>
+              ) : (
+                <Card.Text className="context-field">{context}</Card.Text>
+              )}
+
               <Card.Text>{author}</Card.Text>
-              <Button>Edit</Button>
-              <Button variant="danger" onClick={() => deletePost(id)}>
-                Delete
+              <Button
+                onClick={() => {
+                  setIsEditMode(!isEditMode);
+                  // for preventing update all of
+                  setEditedPost(id);
+                }}
+                variant={
+                  isEditMode && editedPost === id ? "warning" : "primary"
+                }
+              >
+                {isEditMode && editedPost === id ? "Cancel" : "Edit"}
               </Button>
+
+              {isEditMode && editedPost === id && (
+                <Button onClick={() => updatePost(id)}>Save</Button>
+              )}
+
+              {!(isEditMode && editedPost === id) && (
+                <Button variant="danger" onClick={() => deletePost(id)}>
+                  Delete
+                </Button>
+              )}
             </Card.Body>
           </Card>
         );
