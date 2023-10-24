@@ -30,7 +30,7 @@ export default function Create({
       </InputGroup>
       <InputGroup>
         <Form.Control
-          rows={50}
+          rows={25}
           as="textarea"
           aria-label="With textarea"
           onChange={updateContext}
