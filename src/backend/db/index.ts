@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 import dotenv from "dotenv";
+console.log("starting up database");
 // loading environment variables
 dotenv.config();
 
