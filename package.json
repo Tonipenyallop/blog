@@ -25,6 +25,8 @@
   "scripts": {
     "start": "react-scripts start",
     "front-dev": "PORT=3001 nodemon src/index",
+    "prod-front": "ts-node src/index.tsx",
+    "prod-back": "ts-node src/backend/index.ts",
     "back-dev": "nodemon src/backend/index.ts",
     "build": "react-scripts build",
     "test": "react-scripts test",
