@@ -1,11 +1,20 @@
 import "bootstrap/dist/css/bootstrap.css";
-
 import axios from "axios";
 import { useState, useEffect } from "react";
 import "./App.css";
 import { Button, Card, Form, InputGroup } from "react-bootstrap";
 import Create from "./create/index";
 import { Post } from "./types";
+
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const isProduction = process.env.REACT_APP_IS_PRODUCTION ?? false;
+
+const apiPath = isProduction
+  ? "https://toni.beho.uk/backend"
+  : "http://localhost:3001";
 
 const author = "Taesu"; // username
 
@@ -23,7 +32,7 @@ function App() {
   }, [postAddedFlag]);
 
   const getAllPosts = async () => {
-    const { data } = await axios.get("http://localhost:3001/posts");
+    const { data } = await axios.get(`${apiPath}/posts`);
     setAllPosts(data);
   };
   const sendRequest = async () => {
@@ -32,7 +41,7 @@ function App() {
     }
 
     try {
-      await axios.post("http://localhost:3001/create", {
+      await axios.post(`${apiPath}/create`, {
         context,
         author,
         title,
@@ -48,12 +57,13 @@ function App() {
   };
 
   const deletePost = async (postId: number) => {
-    await axios.delete(`http://localhost:3001/post/${postId}`);
+    await axios.delete(`/backend/post/${postId}`);
     setPostAddedFlag(!postAddedFlag);
   };
 
   const updatePost = async (postId: number) => {
-    await axios.post(`http://localhost:3001/post/${postId}`, { context });
+    // todo taesu from here https://toni.beho.uk/backend/post
+    await axios.post(`${apiPath}/post/${postId}`, { context });
     setIsEditMode(false);
     // for preventing update all of
     setEditedPost(-1);
@@ -109,12 +119,12 @@ function App() {
               {isEditMode && editedPost === id && (
                 <Button onClick={() => updatePost(id)}>Save</Button>
               )}
-
-              {!(isEditMode && editedPost === id) && (
+              {/* I don't want to delete my precious post by mistake */}
+              {/* {!(isEditMode && editedPost === id) && (
                 <Button variant="danger" onClick={() => deletePost(id)}>
                   Delete
                 </Button>
-              )}
+              )} */}
             </Card.Body>
           </Card>
         );
