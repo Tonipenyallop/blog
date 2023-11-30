@@ -30,8 +30,7 @@
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "front-dev": "PORT=3001 nodemon src/index",
-    "tmp": "npm run build && serve -s build -l 5000",
-    "prod-front": "ts-node src/index.tsx",
+    "prod-front": "serve -s build",
     "prod-back": "ts-node src/backend/index.ts",
     "back-dev": "nodemon src/backend/index.ts"
   },
