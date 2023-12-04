@@ -12,9 +12,7 @@ dotenv.config();
 
 const isProduction = process.env.REACT_APP_IS_PRODUCTION ?? false;
 
-const apiPath = isProduction
-  ? "https://toni.beho.uk/backend"
-  : "http://localhost:3001";
+const apiPath = isProduction ? "https://toni.beho.uk" : "http://localhost:3001";
 
 const author = "Taesu"; // username
 
