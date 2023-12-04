@@ -31,6 +31,8 @@ function App() {
 
   const getAllPosts = async () => {
     const { data } = await axios.get(`${apiPath}/posts`);
+    console.log("data - do I need to parse it?");
+    console.log(data);
     setAllPosts(data);
   };
   const sendRequest = async () => {
@@ -79,7 +81,7 @@ function App() {
   return (
     <div className="app-container">
       <h1 className="page-title"> WELCOME TO TONI BLOG</h1>
-      {allPosts?.map((post, idx) => {
+      {allPosts.map((post, idx) => {
         const { id, author, title, context } = post;
         return (
           <Card key={`post-key-${idx}`}>
