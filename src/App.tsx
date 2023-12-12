@@ -5,16 +5,7 @@ import "./App.css";
 import { Button, Card, Form, InputGroup } from "react-bootstrap";
 import Create from "./create/index";
 import { Post } from "./types";
-
-import dotenv from "dotenv";
-
-dotenv.config();
-
-const isProduction = process.env.REACT_APP_IS_PRODUCTION ?? false;
-
-const apiPath = isProduction
-  ? "https://toni.beho.uk/backend"
-  : "http://localhost:3001";
+import ApiPath from "./ApiPath";
 
 const author = "Taesu"; // username
 
@@ -31,8 +22,10 @@ function App() {
     getAllPosts();
   }, [postAddedFlag]);
 
+  const POST_API_PATH = `${ApiPath}/post`;
+
   const getAllPosts = async () => {
-    const { data } = await axios.get(`${apiPath}/posts`);
+    const { data } = await axios.get(POST_API_PATH);
     console.log("data - do I need to parse it?");
     console.log(data);
     setAllPosts(data);
@@ -43,7 +36,7 @@ function App() {
     }
 
     try {
-      await axios.post(`${apiPath}/create`, {
+      await axios.post(`${POST_API_PATH}/create`, {
         context,
         author,
         title,
@@ -65,7 +58,7 @@ function App() {
 
   const updatePost = async (postId: number) => {
     // todo taesu from here https://toni.beho.uk/backend/post
-    await axios.post(`${apiPath}/post/${postId}`, { context });
+    await axios.post(`${POST_API_PATH}/${postId}`, { context });
     setIsEditMode(false);
     // for preventing update all of
     setEditedPost(-1);
