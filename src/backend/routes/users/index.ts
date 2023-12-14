@@ -8,6 +8,9 @@ UserRouter.post("/sign-up", async (req: Request<User>, res: Response) => {
   try {
     const user = req.body as User;
     const userData = await userService.signUp(user);
+    if (userData === null) {
+      return res.sendStatus(400);
+    }
     return res.status(201).send(userData);
   } catch (err) {
     console.error(`err while getting posts: ${err}`);
