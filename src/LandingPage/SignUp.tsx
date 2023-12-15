@@ -5,12 +5,15 @@ import axios from "axios";
 import ApiPath from "../ApiPath";
 import { User } from "../types";
 
+type InputType = "username" | "password" | "email";
+
 const USER_API_PATH = `${ApiPath}/user`;
 
 const SignUp = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [signUpError, setSignUpError] = useState<boolean>(false);
 
   const signUpUser = async () => {
@@ -18,6 +21,7 @@ const SignUp = () => {
       const response = await axios.post(`${USER_API_PATH}/sign-up`, {
         username,
         password,
+        email,
       } as User);
       if (response) {
         navigate("/user");
@@ -26,24 +30,50 @@ const SignUp = () => {
       setSignUpError(true);
     }
   };
-  const updateUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
+  const updateSignUpValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputType = event.target.id as InputType;
+
+    let updateStateMethod = null;
+
+    if (inputType === "username") {
+      updateStateMethod = setUsername;
+    } else if (inputType === "password") {
+      updateStateMethod = setPassword;
+    } else if (inputType === "email") {
+      updateStateMethod = setEmail;
+    }
+
+    if (updateStateMethod !== null) {
+      updateStateMethod(event.target.value);
+    }
     // for reset signUpError
     setSignUpError(false);
   };
-  const updatePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-    // for reset signUpError
-    setSignUpError(false);
-  };
+
   return (
     <div>
-      <input type="text" placeholder="username" onChange={updateUsername} />
-      <input type="text" placeholder="password" onChange={updatePassword} />
+      <input
+        id="username"
+        type="text"
+        placeholder="username"
+        onChange={updateSignUpValue}
+      />
+      <input
+        id="password"
+        type="text"
+        placeholder="password"
+        onChange={updateSignUpValue}
+      />
+      <input
+        id="email"
+        type="text"
+        placeholder="email"
+        onChange={updateSignUpValue}
+      />
       <Button onClick={signUpUser}> Register from here</Button>
       {signUpError && (
         <div className="alert alert-danger" role="alert">
-          username and password are required
+          username, password, email are required
         </div>
       )}
     </div>

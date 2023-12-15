@@ -9,6 +9,7 @@ export interface Post {
 export interface User {
   id: number;
   username: string;
+  email: string;
   currentChallenge?: string;
   password: string;
   authenticatorID?: number;
