@@ -1,9 +1,8 @@
-import { User } from "../../../types";
 import { AppDataSource } from "../../db/index";
-import { User as UserEntityType } from "../../entities/user.entity";
+import { User } from "../../entities/user.entity";
 import bcrypt from "bcrypt";
 
-const UserEntity = AppDataSource.getRepository(UserEntityType);
+const UserEntity = AppDataSource.getRepository(User);
 
 export const userRepository = {
   signUp: (user: User) => {
@@ -14,7 +13,12 @@ export const userRepository = {
     const salt = bcrypt.genSaltSync();
     const hashedPassword = bcrypt.hashSync(password, salt);
     try {
-      return UserEntity.insert({ username, password: hashedPassword, email });
+      const newUser = UserEntity.create({
+        username,
+        password: hashedPassword,
+        email,
+      });
+      return UserEntity.save(newUser);
     } catch (err) {
       throw new Error(`error occurred while sending SELECT schema: ${err}`);
     }
