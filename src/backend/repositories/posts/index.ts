@@ -1,22 +1,35 @@
-import { pool } from "../../db/index";
-import { Post } from "../../../types";
+import { AppDataSource, pool } from "../../db/index";
+
+import { Post } from "../../entities/post.entity";
+
+const PostEntity = AppDataSource.getRepository(Post);
 
 export const postRepository = {
-  getAllPosts: async () => {
-    const results = await pool.query(
-      `SELECT id, author, context, title, created_at FROM blogschema.posts WHERE is_deleted = false ORDER BY created_at DESC`
-    );
-    return results.rows;
+  getAllPosts: (userID: number) => {
+    if (typeof userID !== "number") {
+      throw new Error(`title, context and author should be provided`);
+    }
+
+    return PostEntity.findBy({ user_id: userID });
   },
 
-  createPost: async (post: Post) => {
+  createPost: (userID: number, post: Post) => {
     try {
-      await pool.query(
-        `INSERT INTO blogschema.posts (title, context, author) VALUES ($1, $2, $3)`,
-        [post.title, post.context, post.author]
-      );
+      const { title, context, author } = post;
+      if (typeof userID !== "number" || !title || !context || !author) {
+        throw new Error(`userID, title, context and author should be provided`);
+      }
+
+      const newPost = PostEntity.create({
+        title,
+        context,
+        author,
+        user_id: userID,
+      });
+
+      return PostEntity.save(newPost);
     } catch (err) {
-      throw new Error(`error occurred while sending SELECT schema: ${err}`);
+      throw new Error(`error occurred while creating post: ${err}`);
     }
   },
   deletePost: async (postId: number) => {
@@ -29,14 +42,12 @@ export const postRepository = {
       throw err;
     }
   },
-  updatePost: async (postId: number, context: string) => {
+  updatePost: (postID: number, context: string) => {
     try {
-      console.log("context from repo");
-      console.log(context);
-      await pool.query(
-        `UPDATE blogschema.posts SET context = $1 WHERE id = $2`,
-        [context, postId]
-      );
+      if (typeof postID !== "number" || !context) {
+        throw new Error(`postID, context should be provided`);
+      }
+      return PostEntity.update({ id: postID }, { context });
     } catch (err) {
       console.error(`error occurred while updating post:${err}`);
       throw err;
