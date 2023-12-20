@@ -1,3 +1,5 @@
+import { startRegistration } from "@simplewebauthn/browser";
+
 import React, { useState } from "react";
 import { Button, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -14,20 +16,35 @@ const SignUp = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [signUpError, setSignUpError] = useState<boolean>(false);
+  const [signUpError, setSignUpError] = useState<string>("");
 
   const signUpUser = async () => {
+    let response;
     try {
-      const response = await axios.post(`${USER_API_PATH}/sign-up`, {
+      response = await axios.post(`${USER_API_PATH}/sign-up`, {
         username,
         password,
         email,
       } as User);
-      if (response) {
-        navigate("/user");
+
+      const option = response.data;
+
+      const authenticatorResponse = await startRegistration(option);
+
+      const verificationRespponse = await axios.post(
+        `${USER_API_PATH}/verify-registration`,
+        { authenticatorResponse, userID: option.user.id }
+      );
+
+      console.log("verificationRespponse");
+      console.log(verificationRespponse);
+      // if (response) {
+      //   navigate("/user");
+      // }
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err) && err.response?.status === 409) {
+        setSignUpError("User already exists");
       }
-    } catch (err) {
-      setSignUpError(true);
     }
   };
   const updateSignUpValue = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +64,7 @@ const SignUp = () => {
       updateStateMethod(event.target.value);
     }
     // for reset signUpError
-    setSignUpError(false);
+    setSignUpError("");
   };
 
   return (
@@ -71,9 +88,9 @@ const SignUp = () => {
         onChange={updateSignUpValue}
       />
       <Button onClick={signUpUser}> Register from here</Button>
-      {signUpError && (
+      {signUpError !== "" && (
         <div className="alert alert-danger" role="alert">
-          username, password, email are required
+          {signUpError}
         </div>
       )}
     </div>
