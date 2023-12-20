@@ -28,3 +28,26 @@
   ```
   npm install typescript@4.9.5
   ```
+
+### Install Mocha
+
+- https://gist.github.com/avermeulen/72598daf29171088689793fc145b999c
+
+* 1. install mocha
+
+```
+  npm install ts-mocha
+
+```
+
+- 2. Update script
+
+```
+  "scripts": {
+    "test": "ts-mocha test/*.ts"
+  }
+```
+
+### Install type orm
+
+- https://typeorm.io/
