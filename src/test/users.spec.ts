@@ -31,7 +31,7 @@ describe("signUp", () => {
   tmpUser.username = testUser.username;
 
   it("should insert new user", async () => {
-    await userRepository.signUp({
+    await userRepository.createUser({
       username: testUser.username,
       password: testUser.password,
       email: testUser.email,
