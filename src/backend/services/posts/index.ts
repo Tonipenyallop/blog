@@ -1,11 +1,11 @@
 import { postRepository } from "../../repositories/posts/index";
-import { Post } from "../../../types";
+import { Post } from "../../entities/post.entity";
 export const postService = {
-  createPost: (post: Post) => {
-    return postRepository.createPost(post);
+  createPost: (userID: number, post: Post) => {
+    return postRepository.createPost(userID, post);
   },
-  getAllPosts: () => {
-    return postRepository.getAllPosts();
+  getAllPosts: (userID: number) => {
+    return postRepository.getAllPosts(userID);
   },
   deletePost: (postId: number) => {
     if (!postId) return null;
