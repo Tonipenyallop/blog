@@ -5,7 +5,7 @@ import { Authenticator } from "../../entities/authenticator.entity";
 const AuthEntity = AppDataSource.getRepository(Authenticator);
 
 export const authRepository = {
-  createAuthenticator: (
+  createUserAuthenticator: (
     verification: VerifiedRegistrationResponse,
     userID: number
   ) => {
@@ -36,6 +36,17 @@ export const authRepository = {
       return AuthEntity.save(authenticator);
     } catch (err) {
       throw new Error("Error while creating authenticator");
+    }
+  },
+  getUserAuthenticators: (userID: number) => {
+    try {
+      if (typeof userID !== "number") {
+        throw new Error("userID should be provided");
+      }
+
+      return AuthEntity.findBy({ userID });
+    } catch (err) {
+      throw new Error("Error while getting user authenticators");
     }
   },
 };

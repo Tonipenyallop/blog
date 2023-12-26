@@ -25,7 +25,11 @@ UserRouter.post(
   async (req: Request<User>, res: Response) => {
     const { authenticatorResponse, userID } = req.body;
     try {
-      return AuthService.verifyRegistration(authenticatorResponse, userID);
+      const verified = await AuthService.verifyRegistration(
+        authenticatorResponse,
+        userID
+      );
+      return res.status(200).send(verified);
     } catch (err) {
       console.error(`err while verifying registration: ${err}`);
       throw err;

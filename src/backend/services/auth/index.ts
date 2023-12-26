@@ -97,6 +97,6 @@ export const AuthService = {
 
     await authRepository.createUserAuthenticator(verification, Number(userID));
 
-    return verified;
+    return { verified };
   },
 };

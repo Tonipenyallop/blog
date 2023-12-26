@@ -3,9 +3,13 @@ import { startRegistration } from "@simplewebauthn/browser";
 import React, { useState } from "react";
 import { Button, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import ApiPath from "../ApiPath";
 import { User } from "../types";
+import { PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/server/script/deps";
+interface Verified {
+  verified: Boolean;
+}
 
 type InputType = "username" | "password" | "email";
 
@@ -31,16 +35,14 @@ const SignUp = () => {
 
       const authenticatorResponse = await startRegistration(option);
 
-      const verificationRespponse = await axios.post(
+      const verificationResponse: AxiosResponse<Verified> = await axios.post(
         `${USER_API_PATH}/verify-registration`,
         { authenticatorResponse, userID: option.user.id }
       );
 
-      console.log("verificationRespponse");
-      console.log(verificationRespponse);
-      // if (response) {
-      //   navigate("/user");
-      // }
+      if (verificationResponse.data.verified) {
+        navigate("/user");
+      }
     } catch (err: unknown) {
       if (axios.isAxiosError(err) && err.response?.status === 409) {
         setSignUpError("User already exists");
