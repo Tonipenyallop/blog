@@ -3,8 +3,9 @@ import {
   verifyRegistrationResponse,
 } from "@simplewebauthn/server";
 import { userRepository } from "../../repositories/users";
+import { authRepository } from "../../repositories/auth";
 import dotenv from "dotenv";
-import { Authenticator } from "../../../types";
+import { Authenticator } from "../../entities/authenticator.entity";
 import { RegistrationResponseJSON } from "@simplewebauthn/server/script/deps";
 
 dotenv.config();
@@ -22,43 +23,47 @@ const origin = isProduction ? `https://${rpID}` : `http://${rpID}:3001`;
 
 export const AuthService = {
   createRegistrationOption: async (email: string) => {
-    const user = await userRepository.getUserByEmail(email);
-    if (!user) {
-      return null;
+    try {
+      const user = await userRepository.getUserByEmail(email);
+      if (!user) {
+        return null;
+      }
+
+      const userAuthenticators: Authenticator[] =
+        await authRepository.getUserAuthenticators(user.id);
+
+      const options = await generateRegistrationOptions({
+        rpName,
+        rpID,
+        userID: user.id.toString(),
+        userName: user.username,
+        // Don't prompt users for additional information about the authenticator
+        // (Recommended for smoother UX)
+        attestationType: "none",
+        // Prevent users from re-registering existing authenticators
+        excludeCredentials: userAuthenticators.map((authenticator) => ({
+          id: authenticator.credentialID,
+          type: "public-key",
+          // Optional
+          transports: authenticator.transports,
+        })),
+        // See "Guiding use of authenticators via authenticatorSelection" below
+        authenticatorSelection: {
+          // Defaults
+          residentKey: "preferred",
+          userVerification: "preferred",
+          // Optional
+          authenticatorAttachment: "platform",
+        },
+      });
+
+      // (Pseudocode) Remember the challenge for this user
+      await userRepository.setUserCurrentChallenge(user.id, options.challenge);
+
+      return options;
+    } catch (err) {
+      throw new Error(`Error while create registration option: ${err}`);
     }
-    // come back here again
-    const userAuthenticators: Authenticator[] = []; //getUserAuthenticators(user);
-
-    const options = await generateRegistrationOptions({
-      rpName,
-      rpID,
-      userID: user.id.toString(),
-      userName: user.username,
-      // Don't prompt users for additional information about the authenticator
-      // (Recommended for smoother UX)
-      attestationType: "none",
-      // Prevent users from re-registering existing authenticators
-      excludeCredentials: [],
-      //  userAuthenticators.map(authenticator => ({
-      //   id: authenticator.credentialID,
-      //   type: 'public-key',
-      //   // Optional
-      //   transports: authenticator.transports,
-      // }))
-      // See "Guiding use of authenticators via authenticatorSelection" below
-      authenticatorSelection: {
-        // Defaults
-        residentKey: "preferred",
-        userVerification: "preferred",
-        // Optional
-        authenticatorAttachment: "platform",
-      },
-    });
-
-    // (Pseudocode) Remember the challenge for this user
-    await userRepository.setUserCurrentChallenge(user.id, options.challenge);
-
-    return options;
   },
   verifyRegistration: async (
     authenticatorResponse: RegistrationResponseJSON,
@@ -68,8 +73,6 @@ export const AuthService = {
     if (!user) {
       return null;
     }
-    console.log("authenticatorResponse");
-    console.log(authenticatorResponse);
 
     const expectedChallenge = user.current_challenge as string;
 
@@ -87,9 +90,13 @@ export const AuthService = {
       throw new Error(`error while verifying registration: ${error}`);
     }
 
+    if (!verification) {
+      return null;
+    }
     const { verified } = verification;
-    console.log("verification");
-    console.log(verification);
+
+    await authRepository.createUserAuthenticator(verification, Number(userID));
+
     return verified;
   },
 };
