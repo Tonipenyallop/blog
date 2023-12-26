@@ -5,10 +5,10 @@ export class Authenticator {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: "bytea" })
   credentialID!: Uint8Array;
 
-  @Column()
+  @Column({ type: "bytea" })
   credentialPublicKey!: Uint8Array;
 
   @Column()
@@ -20,7 +20,7 @@ export class Authenticator {
   @Column()
   credentialBackedUp!: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "character varying", array: true })
   transports?: AuthenticatorTransport[];
 
   @Column()
