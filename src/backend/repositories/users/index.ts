@@ -30,6 +30,7 @@ export const userRepository = {
       throw new Error(`error occurred while creating user: ${err}`);
     }
   },
+  // for registering the user
   getUserByEmail: (email: string) => {
     if (!email) {
       throw new Error(`username or password should be provided`);
@@ -40,11 +41,27 @@ export const userRepository = {
       throw new Error(`error occurred while getting user by email: ${err}`);
     }
   },
+
+  compareUserPassword: async (password: string, email: string) => {
+    try {
+      if (!email || !password) {
+        throw new Error(`userID should be provided`);
+      }
+      const user = await userRepository.getUserByEmail(email);
+
+      if (!user) {
+        throw new Error(`user doesn't exist`);
+      }
+
+      return bcrypt.compareSync(password, user.password);
+    } catch (err) {
+      throw new Error(
+        "error occurred while getting user by email and password"
+      );
+    }
+  },
   getUserByID: (userID: number) => {
     try {
-      console.log("getUserByID was called mate");
-      console.log(typeof userID);
-      console.log(userID);
       if (typeof userID !== "number") {
         throw new Error(`userID should be provided`);
       }
@@ -65,6 +82,21 @@ export const userRepository = {
       );
     } catch (err) {
       throw new Error(`error occurred while setting challenge: ${err}`);
+    }
+  },
+  setAuthenticatorID(userID: number, authenticatorRawID: string) {
+    if (typeof userID !== "number" || !authenticatorRawID) {
+      throw new Error("userID or authenticatorRawID should be provided");
+    }
+    try {
+      UserEntity.update(
+        { id: userID },
+        {
+          authenticator_id: authenticatorRawID,
+        }
+      );
+    } catch (err) {
+      throw new Error(`error occurred while setting authenticator ID: ${err}`);
     }
   },
 };
