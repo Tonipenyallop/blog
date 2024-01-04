@@ -1,12 +1,17 @@
 import {
   generateRegistrationOptions,
   verifyRegistrationResponse,
+  generateAuthenticationOptions,
+  verifyAuthenticationResponse,
 } from "@simplewebauthn/server";
 import { userRepository } from "../../repositories/users";
 import { authRepository } from "../../repositories/auth";
 import dotenv from "dotenv";
 import { Authenticator } from "../../entities/authenticator.entity";
-import { RegistrationResponseJSON } from "@simplewebauthn/server/script/deps";
+import {
+  AuthenticationResponseJSON,
+  RegistrationResponseJSON,
+} from "@simplewebauthn/server/script/deps";
 
 dotenv.config();
 
@@ -44,8 +49,6 @@ export const AuthService = {
         excludeCredentials: userAuthenticators.map((authenticator) => ({
           id: authenticator.credentialID,
           type: "public-key",
-          // Optional
-          transports: authenticator.transports,
         })),
         // See "Guiding use of authenticators via authenticatorSelection" below
         authenticatorSelection: {
@@ -98,5 +101,84 @@ export const AuthService = {
     await authRepository.createUserAuthenticator(verification, Number(userID));
 
     return { verified };
+  },
+  generateAuthenticationOptions: async (email: string) => {
+    if (!email) {
+      return null;
+    }
+    const user = await userRepository.getUserByEmail(email);
+
+    if (!user) {
+      return null;
+    }
+
+    const userAuthenticators: Authenticator[] =
+      await authRepository.getUserAuthenticators(user.id);
+
+    const options = await generateAuthenticationOptions({
+      rpID,
+      // Require users to use a previously-registered authenticator
+      allowCredentials: userAuthenticators.map((authenticator) => ({
+        id: authenticator.credentialID,
+        type: "public-key",
+      })),
+      userVerification: "preferred",
+    });
+
+    await userRepository.setUserCurrentChallenge(user.id, options.challenge);
+
+    return options;
+  },
+  verifyAuthentication: async (
+    email: string,
+    authenticationResponse: AuthenticationResponseJSON
+  ) => {
+    if (!email || !authenticationResponse) {
+      return null;
+    }
+    const user = await userRepository.getUserByEmail(email);
+    if (!user) {
+      return null;
+    }
+    const expectedChallenge = user.current_challenge as string;
+
+    const userAuthenticator = await authRepository.getSingleUserAuthenticator(
+      Number(user.id),
+      authenticationResponse.id
+    );
+
+    if (!userAuthenticator) {
+      return null;
+    }
+
+    let verification;
+    try {
+      verification = await verifyAuthenticationResponse({
+        response: authenticationResponse,
+        expectedChallenge,
+        expectedOrigin: origin,
+        expectedRPID: rpID,
+        authenticator: userAuthenticator,
+      });
+    } catch (err) {
+      throw new Error(`Error while verifying user: ${err}`);
+    }
+    const { verified } = verification;
+    return verified;
+  },
+
+  setRawID: async (email: string, authenticatorRawID: string) => {
+    const user = await userRepository.getUserByEmail(email);
+    if (!user) {
+      return null;
+    }
+    try {
+      return authRepository.setUserAuthenticateRawID(
+        user.id,
+        authenticatorRawID
+      );
+    } catch (err) {
+      throw new Error(`Error while setting raw ID`);
+    }
   },
 };
