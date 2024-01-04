@@ -25,4 +25,7 @@ export class Authenticator {
 
   @Column()
   userID!: number;
+
+  @Column({ nullable: true })
+  rawID?: string;
 }
