@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-// import { AppDataSource } from "../db";
 
 @Entity()
 export class User {
@@ -18,10 +17,8 @@ export class User {
   password!: string;
 
   @Column({ nullable: true })
-  authenticator_id?: number;
+  authenticator_id?: string;
 
   @Column()
   email!: string;
 }
-
-// export const UserEntity = AppDataSource.getRepository(User);
