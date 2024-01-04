@@ -1,17 +1,17 @@
 import { startRegistration } from "@simplewebauthn/browser";
 
 import React, { useState } from "react";
-import { Button, InputGroup } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
 import ApiPath from "../ApiPath";
 import { User } from "../types";
-import { PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/server/script/deps";
+
 interface Verified {
   verified: Boolean;
 }
 
-type InputType = "username" | "password" | "email";
+export type InputType = "username" | "password" | "email";
 
 const USER_API_PATH = `${ApiPath}/user`;
 
