@@ -38,6 +38,21 @@ export const authRepository = {
       throw new Error("Error while creating authenticator");
     }
   },
+
+  getSingleUserAuthenticator: async (
+    userID: number,
+    authenticatorID: string
+  ) => {
+    if (typeof userID !== "number" || !authenticatorID) {
+      throw new Error("userID or authenticatorID should be provided");
+    }
+
+    return AuthEntity.findOneBy({
+      userID,
+      rawID: authenticatorID,
+    });
+  },
+
   getUserAuthenticators: (userID: number) => {
     try {
       if (typeof userID !== "number") {
@@ -47,6 +62,19 @@ export const authRepository = {
       return AuthEntity.findBy({ userID });
     } catch (err) {
       throw new Error("Error while getting user authenticators");
+    }
+  },
+  setUserAuthenticateRawID: async (
+    userID: number,
+    authenticatorRawID: string
+  ) => {
+    if (typeof userID !== "number" || !authenticatorRawID) {
+      throw new Error("userID or authenticatorRawID should be provided");
+    }
+    try {
+      return AuthEntity.update({ userID }, { rawID: authenticatorRawID });
+    } catch (err) {
+      throw new Error("Error while setting user authenticator raw ID");
     }
   },
 };
