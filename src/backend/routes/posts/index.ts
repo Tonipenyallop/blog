@@ -1,24 +1,31 @@
 import express, { Request, Response } from "express";
 import { postService } from "../../services/posts/index";
-import { Post } from "../../../types";
+import { Post } from "../../entities/post.entity";
+import { authorizeToken, CustomRequest } from "../../middleware";
 
 const PostRouter = express.Router();
 
-PostRouter.post("/create", async (req: Request, res: Response) => {
-  const post = req.body as Post;
+PostRouter.post(
+  "/create",
+  authorizeToken,
+  async (req: Request, res: Response) => {
+    const post = req.body as Post;
+    const userID = 99;
 
-  try {
-    const postData = await postService.createPost(post);
-    return res.status(201).send(postData);
-  } catch (err) {
-    console.error(`err while creating post: ${err}`);
-    throw err;
+    try {
+      const postData = await postService.createPost(userID, post);
+      return res.status(201).send(postData);
+    } catch (err) {
+      console.error(`err while creating post: ${err}`);
+      throw err;
+    }
   }
-});
+);
 
 PostRouter.get("/", async (req: Request, res: Response) => {
   try {
-    const posts = await postService.getAllPosts();
+    const userID = 99;
+    const posts = await postService.getAllPosts(userID);
     return res.status(200).send(posts);
   } catch (err) {
     console.error(`err while getting posts: ${err}`);
