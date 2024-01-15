@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import PostRouter from "./routes/posts";
 import UserRouter from "./routes/users";
+import AuthRouter from "./routes/auth";
 import { AppDataSource } from "./db";
 const app = express();
 const PORT = process.env.PORT || 3333;
@@ -14,6 +15,7 @@ app.use(cors());
 
 app.use("/post", PostRouter);
 app.use("/user", UserRouter);
+app.use("/auth", AuthRouter);
 
 app.listen(PORT, () => console.log(`Listing PORT:${PORT}`));
 
