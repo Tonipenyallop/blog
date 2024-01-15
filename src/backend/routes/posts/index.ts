@@ -1,7 +1,8 @@
 import express, { Request, Response } from "express";
 import { postService } from "../../services/posts/index";
 import { Post } from "../../entities/post.entity";
-import { authorizeToken, CustomRequest } from "../../middleware";
+import { authorizeToken } from "../../middleware";
+import { JWTToken } from "../../../types";
 
 const PostRouter = express.Router();
 
@@ -9,11 +10,15 @@ PostRouter.post(
   "/create",
   authorizeToken,
   async (req: Request, res: Response) => {
+    const user = req.user as JWTToken;
     const post = req.body as Post;
-    const userID = 99;
+
+    const { userID, username } = user;
+
+    post.author = username;
 
     try {
-      const postData = await postService.createPost(userID, post);
+      const postData = await postService.createPost(Number(userID), post);
       return res.status(201).send(postData);
     } catch (err) {
       console.error(`err while creating post: ${err}`);
