@@ -27,10 +27,12 @@ PostRouter.post(
   }
 );
 
-PostRouter.get("/", async (req: Request, res: Response) => {
+PostRouter.get("/", authorizeToken, async (req: Request, res: Response) => {
   try {
-    const userID = 99;
-    const posts = await postService.getAllPosts(userID);
+    const user = req.user as JWTToken;
+    const { userID } = user;
+
+    const posts = await postService.getAllPosts(Number(userID));
     return res.status(200).send(posts);
   } catch (err) {
     console.error(`err while getting posts: ${err}`);
