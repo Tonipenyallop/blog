@@ -7,9 +7,11 @@ export const postService = {
   getAllPosts: (userID: number) => {
     return postRepository.getAllPosts(userID);
   },
-  deletePost: (postId: number) => {
-    if (!postId) return null;
-    return postRepository.deletePost(postId);
+  deletePost: (userID: number, postID: number) => {
+    if (typeof userID !== "number" || typeof postID !== "number") {
+      return null;
+    }
+    return postRepository.deletePost(userID, postID);
   },
   updatePost: (postId: number, context: string) => {
     if (!postId || !context) return null;

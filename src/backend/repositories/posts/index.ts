@@ -10,7 +10,7 @@ export const postRepository = {
       throw new Error(`title, context and author should be provided`);
     }
 
-    return PostEntity.findBy({ user_id: userID });
+    return PostEntity.findBy({ user_id: userID, is_deleted: false });
   },
 
   createPost: (userID: number, post: Post) => {
@@ -32,11 +32,12 @@ export const postRepository = {
       throw new Error(`error occurred while creating post: ${err}`);
     }
   },
-  deletePost: async (postId: number) => {
+  deletePost: async (userID: number, postID: number) => {
     try {
-      await pool.query(`UPDATE blogschema.posts SET
-      is_deleted = true WHERE
-      id = ${postId}`);
+      return PostEntity.update(
+        { id: postID, user_id: userID },
+        { is_deleted: true }
+      );
     } catch (err) {
       console.error(`error occurred while deleting post:${err}`);
       throw err;

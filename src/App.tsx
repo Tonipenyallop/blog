@@ -50,8 +50,8 @@ function App() {
     }
   };
 
-  const deletePost = async (postId: number) => {
-    await axios.delete(`/backend/post/${postId}`);
+  const deletePost = async (postID: number) => {
+    await axios.delete(`${POST_API_PATH}/${postID}`);
     setPostAddedFlag(!postAddedFlag);
   };
 
@@ -119,11 +119,11 @@ function App() {
                 <Button onClick={() => updatePost(id)}>Save</Button>
               )}
               {/* I don't want to delete my precious post by mistake */}
-              {/* {!(isEditMode && editedPost === id) && (
+              {!(isEditMode && editedPost === id) && (
                 <Button variant="danger" onClick={() => deletePost(id)}>
                   Delete
                 </Button>
-              )} */}
+              )}
             </Card.Body>
           </Card>
         );

@@ -40,17 +40,24 @@ PostRouter.get("/", authorizeToken, async (req: Request, res: Response) => {
   }
 });
 
-PostRouter.delete("/:postId", async (req: Request, res: Response) => {
-  try {
-    const { postId } = req.params;
+PostRouter.delete(
+  "/:postID",
+  authorizeToken,
+  async (req: Request, res: Response) => {
+    try {
+      const user = req.user as JWTToken;
 
-    await postService.deletePost(Number(postId));
-    return res.sendStatus(204);
-  } catch (err) {
-    console.error(`err while getting posts: ${err}`);
-    throw err;
+      const { userID } = user;
+      const { postID } = req.params;
+
+      await postService.deletePost(Number(userID), Number(postID));
+      return res.sendStatus(204);
+    } catch (err) {
+      console.error(`err while getting posts: ${err}`);
+      throw err;
+    }
   }
-});
+);
 
 PostRouter.post("/:postId", async (req: Request, res: Response) => {
   try {
