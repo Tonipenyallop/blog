@@ -31,3 +31,8 @@ export interface Authenticator {
   // Ex: ['usb' | 'ble' | 'nfc' | 'internal']
   transports?: AuthenticatorTransport[];
 }
+
+export interface JWTToken {
+  userID: string;
+  username: string;
+}
