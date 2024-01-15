@@ -14,6 +14,7 @@ type Options = {
 };
 
 const USER_API_PATH = `${ApiPath}/user`;
+const AUTH_API_PATH = `${ApiPath}/auth`;
 
 const Login = () => {
   const navigate = useNavigate();
@@ -85,6 +86,11 @@ const Login = () => {
       if (!verification) {
         return setSignUpError("Failed to authenticate");
       }
+      // call new api to store user
+      const userID = authenticationResponse.response.userHandle as string;
+
+      // store jwt token to cookie
+      await axios.post(`${AUTH_API_PATH}/token`, { userID });
 
       navigate("/user");
     } catch (err: unknown) {
