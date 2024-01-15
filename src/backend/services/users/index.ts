@@ -17,7 +17,7 @@ export const userService = {
       throw new Error(`error while signing up ${err}`);
     }
   },
-  login: async (password: string, email: string) => {
+  login: (password: string, email: string) => {
     try {
       if (!password || !email) {
         return null;
@@ -40,5 +40,11 @@ export const userService = {
     } catch (err) {
       throw new Error("error while setting authenticator ID");
     }
+  },
+  getUsername: (userID: number) => {
+    if (typeof userID !== "number") {
+      return null;
+    }
+    return userRepository.getUsername(userID);
   },
 };
