@@ -71,6 +71,23 @@ export const userRepository = {
     }
   },
 
+  getUsername: async (userID: number) => {
+    try {
+      if (typeof userID !== "number") {
+        throw new Error(`userID should be provided`);
+      }
+      const user = await UserEntity.findOneBy({ id: userID });
+
+      if (!user) {
+        return null;
+      }
+
+      return user.username;
+    } catch (err) {
+      throw new Error(`error occurred while getting user by ID: ${err}`);
+    }
+  },
+
   setUserCurrentChallenge(userID: number, challenge: string) {
     if (typeof userID !== "number" || !challenge) {
       throw new Error(`user or challenge should be provided`);
