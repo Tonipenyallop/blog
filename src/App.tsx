@@ -1,15 +1,15 @@
 import "bootstrap/dist/css/bootstrap.css";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import "./App.css";
+import { useNavigate } from "react-router-dom";
 import { Button, Card, Form, InputGroup } from "react-bootstrap";
 import Create from "./create/index";
 import { Post } from "./types";
 import ApiPath from "./ApiPath";
-
-const author = "Taesu"; // username
+import "./App.css";
 
 function App() {
+  const navigate = useNavigate();
   const [title, setTitle] = useState<string>("");
   const [context, setContext] = useState<string>("");
   const [displayCreate, setDisplayCreate] = useState<boolean>(false);
@@ -25,7 +25,7 @@ function App() {
   const POST_API_PATH = `${ApiPath}/post`;
 
   const getAllPosts = async () => {
-    const { data } = await axios.get(POST_API_PATH);
+    const { data } = await axios.get(`${POST_API_PATH}`);
     console.log("data - do I need to parse it?");
     console.log(data);
     setAllPosts(data);
@@ -38,7 +38,6 @@ function App() {
     try {
       await axios.post(`${POST_API_PATH}/create`, {
         context,
-        author,
         title,
       });
       // for retrieving new "allPosts"
@@ -73,9 +72,14 @@ function App() {
     setTitle(event.target.value);
   };
 
+  const logout = () => {
+    navigate("/");
+  };
+
   return (
     <div className="app-container">
       <h1 className="page-title"> WELCOME TO TONI BLOG</h1>
+      <Button onClick={logout}>Logout</Button>
       {allPosts.map((post, idx) => {
         const { id, author, title, context } = post;
         return (
