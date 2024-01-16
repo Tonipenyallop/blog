@@ -3,8 +3,7 @@ import { Environment } from "./types";
 
 dotenv.config();
 
-export const isProduction =
-  process.env.REACT_APP_IS_PRODUCTION === Environment.PRODUCTION;
+export const isProduction = process.env.NODE_ENV === Environment.PRODUCTION;
 
 const ApiPath = isProduction
   ? process.env.PRODUCTION_API_DOMAIN
