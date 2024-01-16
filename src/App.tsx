@@ -48,9 +48,12 @@ function App() {
       });
       // for retrieving new "allPosts"
       setPostAddedFlag(!postAddedFlag);
+
       // reset title and context field
       setTitle("");
       setContext("");
+
+      setDisplayCreate(false);
     } catch (err) {
       console.error("failed to fetch");
     }
@@ -86,8 +89,22 @@ function App() {
 
   return (
     <div className="app-container">
-      <h1 className="page-title"> WELCOME TO TONI BLOG</h1>
-      <Button onClick={logout}>Logout</Button>
+      <div className="header">
+        <h1 className="page-title"> WELCOME TO TONI BLOG</h1>
+        <Button onClick={logout}>Logout</Button>
+        <Button onClick={() => setDisplayCreate(!displayCreate)}>
+          {displayCreate ? "Back" : "Create"}
+        </Button>
+        {displayCreate && (
+          <Create
+            context={context}
+            title={title}
+            sendRequest={sendRequest}
+            updateContext={updateContext}
+            updateTitle={updateTitle}
+          />
+        )}
+      </div>
       {allPosts.map((post, idx) => {
         const { id, author, title, context } = post;
         return (
@@ -136,18 +153,6 @@ function App() {
           </Card>
         );
       })}
-      <Button onClick={() => setDisplayCreate(!displayCreate)}>
-        {displayCreate ? "Back" : "Create"}
-      </Button>
-      {displayCreate && (
-        <Create
-          context={context}
-          title={title}
-          sendRequest={sendRequest}
-          updateContext={updateContext}
-          updateTitle={updateTitle}
-        />
-      )}
     </div>
   );
 }

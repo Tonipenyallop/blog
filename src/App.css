@@ -1,13 +1,22 @@
 .app-container {
   display: flex;
   flex-direction: column;
-  margin: 10%;
+
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: white;
+    padding: 30px;
+    border-bottom: 1px solid black;
+  }
   .page-title {
     text-align: center;
   }
   .card {
     border: 1px solid black;
-    margin: 10px;
+    margin: 20px 10%;
+    padding: 10px;
   }
   .title-field {
     min-height: 50px;
