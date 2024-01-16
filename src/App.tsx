@@ -24,9 +24,6 @@ function App() {
 
   const POST_API_PATH = `${ApiPath}/post`;
 
-  console.log("POST_API_PATH");
-  console.log(POST_API_PATH);
-
   const getAllPosts = async () => {
     const { data } = await axios.get(`${POST_API_PATH}`);
     console.log("data - do I need to parse it?");
