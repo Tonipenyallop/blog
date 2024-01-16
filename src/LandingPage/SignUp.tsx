@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
 import ApiPath from "../ApiPath";
 import { User } from "../types";
+import { AUTH_API_PATH } from "./Login";
 
 interface Verified {
   verified: Boolean;
@@ -33,14 +34,18 @@ const SignUp = () => {
 
       const option = response.data;
 
+      const userID = option.user.id;
+
       const authenticatorResponse = await startRegistration(option);
 
       const verificationResponse: AxiosResponse<Verified> = await axios.post(
         `${USER_API_PATH}/verify-registration`,
-        { authenticatorResponse, userID: option.user.id }
+        { authenticatorResponse, userID }
       );
 
       if (verificationResponse.data.verified) {
+        // store jwt token to cookie
+        await axios.post(`${AUTH_API_PATH}/token`, { userID });
         navigate("/user");
       }
     } catch (err: unknown) {
