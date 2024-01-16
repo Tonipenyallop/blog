@@ -12,10 +12,9 @@ import {
   AuthenticationResponseJSON,
   RegistrationResponseJSON,
 } from "@simplewebauthn/server/script/deps";
+import { isProduction } from "../../../ApiPath";
 
 dotenv.config();
-
-const isProduction = process.env.REACT_APP_IS_PRODUCTION ?? false;
 
 // Human-readable title for your website
 const rpName = "Toni blog";
