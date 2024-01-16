@@ -10,7 +10,7 @@ console.log(Environment.PRODUCTION);
 export const isProduction = process.env.NODE_ENV === Environment.PRODUCTION;
 
 const ApiPath = isProduction
-  ? process.env.PRODUCTION_API_DOMAIN
+  ? process.env.REACT_APP_PRODUCTION_API_DOMAIN
   : "http://localhost:3001";
 console.log("ApiPath");
 console.log(ApiPath);
