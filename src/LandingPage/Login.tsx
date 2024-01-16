@@ -102,6 +102,7 @@ const Login = () => {
 
   return (
     <div>
+      <h3>LOGIN</h3>
       <input
         id="email"
         // for auto fill in browser
@@ -117,7 +118,7 @@ const Login = () => {
         placeholder="password"
         onChange={updateLoginValue}
       />
-      <Button onClick={sendLoginRequest}> Login button</Button>
+      <Button onClick={sendLoginRequest}> Login</Button>
       {signUpError !== "" && (
         <div className="alert alert-danger" role="alert">
           {signUpError}

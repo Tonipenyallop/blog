@@ -76,6 +76,7 @@ const SignUp = () => {
 
   return (
     <div>
+      <h3>SIGN UP</h3>
       <input
         id="username"
         name="username"
