@@ -25,8 +25,6 @@ export function authorizeToken(
     return res.sendStatus(401);
   }
 
-  console.log("token");
-  console.log(token);
   const jwtCookie = token.split("=")[1];
   const decodedToken = jwt.verify(jwtCookie, JWT_PRIVATE_KEY as string);
 

@@ -69,7 +69,6 @@ UserRouter.post(
     req: Request<PublicKeyCredentialRequestOptionsJSON>,
     res: Response
   ) => {
-    console.log("verify-authentication");
     const { email, authenticationResponse } = req.body;
     try {
       const verification = await AuthService.verifyAuthentication(
