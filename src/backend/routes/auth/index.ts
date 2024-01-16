@@ -12,13 +12,13 @@ const AuthRouter = express.Router();
 AuthRouter.post("/token", async (req: Request, res: Response) => {
   const { userID } = req.body;
   if (!userID) {
-    return res.sendStatus(400);
+    return res.sendStatus(401);
   }
 
   const username = await userService.getUsername(Number(userID));
 
   if (!username) {
-    return res.sendStatus(400);
+    return res.sendStatus(401);
   }
 
   const jwtToken: JWTToken = { userID, username };

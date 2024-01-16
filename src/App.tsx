@@ -6,6 +6,7 @@ import { Button, Card, Form, InputGroup } from "react-bootstrap";
 import Create from "./create/index";
 import { Post } from "./types";
 import ApiPath from "./ApiPath";
+import Cookies from "js-cookie";
 import "./App.css";
 
 function App() {
@@ -25,10 +26,15 @@ function App() {
   const POST_API_PATH = `${ApiPath}/post`;
 
   const getAllPosts = async () => {
-    const { data } = await axios.get(`${POST_API_PATH}`);
-    console.log("data - do I need to parse it?");
-    console.log(data);
-    setAllPosts(data);
+    try {
+      const { data } = await axios.get(`${POST_API_PATH}`);
+      setAllPosts(data);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
+        // navigate the unauthorized user to landing page
+        navigate("/");
+      }
+    }
   };
   const sendRequest = async () => {
     if (context === "" || title === "") {
@@ -73,6 +79,8 @@ function App() {
   };
 
   const logout = () => {
+    // remove cookie
+    Cookies.remove("jwt");
     navigate("/");
   };
 
