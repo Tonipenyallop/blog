@@ -1,5 +1,9 @@
 # Welcome to Taesu's Blog
 
+- Contents
+  - [How to run application in VM?](https://github.com/Tonipenyallop/blog?tab=readme-ov-file#how-to-run-application-in-vm)
+  - [Tech stack](https://github.com/Tonipenyallop/blog?tab=readme-ov-file#tech-stack)
+
 ## How to run application in VM?
 
 ### Frontend side
@@ -58,4 +62,4 @@
   - secure the login using **biometrics**
   - being able to remember username and password by **website** so that the user does not need to remember those
 - **JWT** for
-  - make sure the user is authorized
+  - making sure the user is authorized
