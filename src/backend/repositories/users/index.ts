@@ -50,7 +50,7 @@ export const userRepository = {
       const user = await userRepository.getUserByEmail(email);
 
       if (!user) {
-        throw new Error(`user doesn't exist`);
+        return null;
       }
 
       return bcrypt.compareSync(password, user.password);
