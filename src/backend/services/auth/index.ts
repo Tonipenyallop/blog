@@ -12,9 +12,11 @@ import {
   AuthenticationResponseJSON,
   RegistrationResponseJSON,
 } from "@simplewebauthn/server/script/deps";
-import { isProduction } from "../../../ApiPath";
 
 dotenv.config();
+
+// This is for BE
+const isProduction = process.env.IS_EXPRESS_PRODUCTION ?? false;
 
 // Human-readable title for your website
 const rpName = "Toni blog";
