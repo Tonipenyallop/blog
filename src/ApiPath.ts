@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 
 dotenv.config();
+console.log("process.env.NODE_ENV");
+console.log(process.env.NODE_ENV);
 console.log("process.env.REACT_APP_IS_PRODUCTION");
 console.log(process.env.REACT_APP_IS_PRODUCTION);
 const isProduction = process.env.REACT_APP_IS_PRODUCTION ?? false;
