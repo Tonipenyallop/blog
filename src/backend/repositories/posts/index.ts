@@ -10,7 +10,10 @@ export const postRepository = {
       throw new Error(`title, context and author should be provided`);
     }
 
-    return PostEntity.findBy({ user_id: userID, is_deleted: false });
+    return PostEntity.find({
+      where: { user_id: userID, is_deleted: false },
+      order: { created_at: "DESC" },
+    });
   },
 
   createPost: (userID: number, post: Post) => {
