@@ -4,15 +4,15 @@
 
 ### Frontend side
 
-- 1. create a build
+- 1. create a build and secure copy builded file to VM
 
   ```
-  npm run build
+  bash build.bash
   ```
 
-- 2. run built file
+- 2. run front end
   ```
-  serve -s build
+  npm run prod-front
   ```
 
 ### Backend side
@@ -51,3 +51,11 @@
 ### Install type orm
 
 - https://typeorm.io/
+
+## Tech stack
+
+- **Webauth** for
+  - secure the login using **biometrics**
+  - being able to remember username and password by **website** so that the user does not need to remember those
+- **JWT** for
+  - make sure the user is authorized
