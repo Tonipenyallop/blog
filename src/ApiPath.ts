@@ -3,6 +3,10 @@ import { Environment } from "./types";
 
 dotenv.config();
 
+console.log("process.env.NODE_ENV");
+console.log(process.env.NODE_ENV);
+console.log("Environment.PRODUCTION");
+console.log(Environment.PRODUCTION);
 export const isProduction = process.env.NODE_ENV === Environment.PRODUCTION;
 
 const ApiPath = isProduction
