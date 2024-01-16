@@ -78,18 +78,21 @@ const SignUp = () => {
     <div>
       <input
         id="sign-up-username"
+        name="sign-up-username"
         type="text"
         placeholder="username"
         onChange={updateSignUpValue}
       />
       <input
         id="sign-up-email"
+        name="sign-up-email"
         type="text"
         placeholder="email"
         onChange={updateSignUpValue}
       />
       <input
         id="sign-up-password"
+        name="sign-up-password"
         type="text"
         placeholder="password"
         onChange={updateSignUpValue}
