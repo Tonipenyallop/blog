@@ -104,7 +104,8 @@ const Login = () => {
     <div>
       <input
         id="login-email"
-        name="login-email"
+        // for auto fill in browser
+        name="login-username"
         type="text"
         placeholder="email"
         onChange={updateLoginValue}
