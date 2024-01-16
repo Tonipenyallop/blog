@@ -32,6 +32,11 @@ export interface Authenticator {
   transports?: AuthenticatorTransport[];
 }
 
+export enum Environment {
+  PRODUCTION = "production",
+  DEVELOPMENT = "development",
+}
+
 export interface JWTToken {
   userID: string;
   username: string;
