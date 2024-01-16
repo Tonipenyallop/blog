@@ -14,7 +14,7 @@ type Options = {
 };
 
 const USER_API_PATH = `${ApiPath}/user`;
-const AUTH_API_PATH = `${ApiPath}/auth`;
+export const AUTH_API_PATH = `${ApiPath}/auth`;
 
 const Login = () => {
   const navigate = useNavigate();
