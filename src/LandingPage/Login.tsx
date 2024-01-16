@@ -103,13 +103,13 @@ const Login = () => {
   return (
     <div>
       <input
-        id="email"
+        id="login-email"
         type="text"
         placeholder="email"
         onChange={updateLoginValue}
       />
       <input
-        id="password"
+        id="login-password"
         type="password"
         placeholder="password"
         onChange={updateLoginValue}

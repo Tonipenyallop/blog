@@ -77,21 +77,21 @@ const SignUp = () => {
   return (
     <div>
       <input
-        id="username"
+        id="sign-up-username"
         type="text"
         placeholder="username"
         onChange={updateSignUpValue}
       />
       <input
-        id="password"
+        id="sign-up-email"
         type="text"
-        placeholder="password"
+        placeholder="email"
         onChange={updateSignUpValue}
       />
       <input
-        id="email"
+        id="sign-up-password"
         type="text"
-        placeholder="email"
+        placeholder="password"
         onChange={updateSignUpValue}
       />
       <Button onClick={signUpUser}> Register from here</Button>
