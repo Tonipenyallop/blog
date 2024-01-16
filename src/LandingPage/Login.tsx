@@ -103,16 +103,16 @@ const Login = () => {
   return (
     <div>
       <input
-        id="login-email"
+        id="email"
         // for auto fill in browser
-        name="login-username"
+        name="username"
         type="text"
         placeholder="email"
         onChange={updateLoginValue}
       />
       <input
-        id="login-password"
-        name="login-password"
+        id="password"
+        name="password"
         type="password"
         placeholder="password"
         onChange={updateLoginValue}

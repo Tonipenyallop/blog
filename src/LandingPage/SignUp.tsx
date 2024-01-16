@@ -77,22 +77,22 @@ const SignUp = () => {
   return (
     <div>
       <input
-        id="sign-up-username"
-        name="sign-up-username"
+        id="username"
+        name="username"
         type="text"
         placeholder="username"
         onChange={updateSignUpValue}
       />
       <input
-        id="sign-up-email"
-        name="sign-up-email"
+        id="email"
+        name="email"
         type="text"
         placeholder="email"
         onChange={updateSignUpValue}
       />
       <input
-        id="sign-up-password"
-        name="sign-up-password"
+        id="password"
+        name="password"
         type="text"
         placeholder="password"
         onChange={updateSignUpValue}
